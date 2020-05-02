@@ -1,0 +1,16 @@
+table {
+    border-collapse: collapse;
+    display: inline;
+    margin-right: 20px;
+}
+
+th, td {
+	padding: 10px;
+	border: 2px #666 solid;
+	text-align: center;
+	width: 20%;
+}
+
+.picked{
+    background-color: #0facaa;
+}
