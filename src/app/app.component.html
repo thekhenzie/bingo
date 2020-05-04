@@ -1,7 +1,13 @@
 <h1>Lets Play BINGO</h1> 
+<br>
+Enter number called:
+<input type="number" [(ngModel)]="numberCalled">
+<button (click)="callNumber()" style="margin-left: 20px;">Add</button>
+<br><br>
 <h5 style="display: inline">Numbers called: </h5>
 <div *ngFor="let number of numbersCalled" style="display: inline; margin-left: 10px;">{{number}}</div>
-<button class="pull-right" (click)="clear()" style="margin-left: 20px;">Clear</button>
+<button (click)="deleteLast()" style="margin-left: 20px;">Delete last called</button>
+<button (click)="clear()" style="margin-left: 20px;">Clear</button>
 <br/><br/>
 <table *ngFor="let card of listOfCards">
   <tr>
@@ -22,8 +28,3 @@
 
 </table>
 
-<br>
-<br>
-Enter number called:
-<input type="number" [(ngModel)]="numberCalled" style="margin-left:10px">
-<button (click)="callNumber()">Add</button>

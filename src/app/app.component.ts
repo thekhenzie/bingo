@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CARDS } from '../data/cards';
+import { KHENCARDS, HAARTCARDS } from '../data/cards';
 
 
 const comboCorner = [[0, 4, 20], [0, 4, 24]];
@@ -14,14 +14,30 @@ export class AppComponent {
 
   listOfCards = [];
   numberCalled: number;
-
+  selectedPlayer = 'Khen';
+  selectedCard = [];
   constructor() {
+    this.selectPlayerAndCard();
     this.createCard();
+  }
+
+  selectPlayerAndCard(){
+    switch(this.selectedPlayer){
+      case 'Khen':
+        this.selectedCard = KHENCARDS;
+        break;
+      case 'Kamille':
+        this.selectedCard = HAARTCARDS;
+        break;
+      default:
+        this.selectedCard = KHENCARDS;
+        break;
+    }
   }
 
   createCard() {
     let createdCards = [];
-    CARDS.map(card => {
+    this.selectedCard.map(card => {
       let cardRowNumbers = [];
       let row = [];
       card.map((c) => {
@@ -40,16 +56,16 @@ export class AppComponent {
       createdCards.push(cardRowNumbers);
     });
     this.listOfCards = createdCards;
+
+    //this.checkBingo();
   }
 
-  callNumber(n: number) {
+  callNumber() {
     if(this.numberCalled){
       this.numbersCalled.push(this.numberCalled);
       this.numberCalled = null;
     }
     this.createCard();
-    
-    //this.checkBingo();
   }
 
   checkBingo() {
@@ -79,7 +95,14 @@ export class AppComponent {
   }
 
   clear() {
-    this.numbersCalled = [];
+    this.numbersCalled = [0];
     this.createCard();
+  }
+
+  deleteLast(){
+    if(this.numbersCalled.length != 1){
+      this.numbersCalled.pop();
+      this.createCard();
+    }
   }
 }
