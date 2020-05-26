@@ -2,6 +2,14 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.1.1.
 
+## Deployment
+
+[Deploying](https://medium.com/tech-insights/how-to-deploy-angular-apps-to-github-pages-gh-pages-896c4e10f9b4) to ghpages
+
+`ng build --prod --base-href "https://thekhenzie.github.io/bingo/"`
+
+`npx angular-cli-ghpages -dir=dist/ng-fundamentals`
+
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
