@@ -1,4 +1,4 @@
-<h1>Lets Play BINGO</h1> 
+<h1>Lets Play BINGO</h1>
 <br>
 Enter number called:
 <input type="number" [(ngModel)]="numberCalled">
@@ -8,7 +8,7 @@ Enter number called:
 <div *ngFor="let number of numbersCalled" style="display: inline; margin-left: 10px;">{{number}}</div>
 <button (click)="deleteLast()" style="margin-left: 20px;">Delete last called</button>
 <button (click)="clear()" style="margin-left: 20px;">Clear</button>
-<br/><br/>
+<br /><br />
 <table *ngFor="let card of listOfCards">
   <tr>
     <th>B</th>
@@ -19,7 +19,9 @@ Enter number called:
   </tr>
   <tr *ngFor="let rowNumbers of card">
     <td *ngFor="let number of rowNumbers" [ngClass]="{'picked' : number.isActive}">
-      <div *ngIf="number.value!=0; else isFree">{{ number.value}}</div>
+      <div *ngIf="number.value!=0; else isFree" (click)="clickNumber(number.value)">
+        {{number.value}}
+      </div>
       <ng-template #isFree>
         FREE
       </ng-template>
@@ -27,4 +29,3 @@ Enter number called:
   </tr>
 
 </table>
-

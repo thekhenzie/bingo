@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { KHENCARDS, HAARTCARDS } from '../data/cards';
+import { COMBOS } from '../data/combo';
 
 
-const comboCorner = [[0, 4, 20], [0, 4, 24]];
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -21,8 +21,8 @@ export class AppComponent {
     this.createCard();
   }
 
-  selectPlayerAndCard(){
-    switch(this.selectedPlayer){
+  selectPlayerAndCard() {
+    switch (this.selectedPlayer) {
       case 'Khen':
         this.selectedCard = KHENCARDS;
         break;
@@ -44,7 +44,7 @@ export class AppComponent {
         let numberValue = {};
         numberValue['value'] = c;
         numberValue['isActive'] = false;
-        if(this.numbersCalled.includes(c)){
+        if (this.numbersCalled.includes(c)) {
           numberValue['isActive'] = true;
         }
         row.push(numberValue);
@@ -57,40 +57,66 @@ export class AppComponent {
     });
     this.listOfCards = createdCards;
 
-    //this.checkBingo();
+    this.checkBingo();
   }
 
   callNumber() {
-    if(this.numberCalled){
+    if (this.numberCalled) {
       this.numbersCalled.push(this.numberCalled);
       this.numberCalled = null;
     }
     this.createCard();
   }
 
+  clickNumber(value: number) {
+    if (value != 0) {
+      let isExisting = this.numbersCalled.some(num => num == value);
+
+      if (isExisting) {
+        this.numbersCalled = this.numbersCalled.filter(num => num != value);
+      } else {
+        this.numbersCalled.push(value);
+      }
+    }
+    this.createCard();
+  }
+
   checkBingo() {
-    //var tantos = this.checkTantos();
-    //this.checkCorner(tantos);
+    var tantos = this.checkTantos();
+    this.checkCombo(tantos);
   }
 
   checkTantos() {
-    // var filtered = card.filter(c => this.numbersCalled.includes(c)); //numbers called on your card
-    // var tantos = []; //index of the numbers called on your card
-    // filtered.map(f => {
-    //   var i = card.findIndex(c => c == f);
-    //   if (i != -1) {
-    //     tantos.push(i);
-    //   }
-    // });
-    // return tantos;
+    var filtered = []; //numbers called on your card [[]]
+    this.selectedCard.map(card => {
+      filtered.push(card.filter(c => this.numbersCalled.includes(c)));
+    });
+    console.log(filtered);
+
+    var tantos = []; //index of the numbers called on your card
+
+    filtered.map((filter,ind) => {
+        var tan = [];
+        filter.map(f => {
+            var i = this.selectedCard[ind].findIndex(c => c == f); 
+            if(i != -1){
+                tan.push(i);
+            } 
+        });
+        tantos.push(tan);
+    });
+    
+    return tantos;
   };
 
-  checkCorner(val) {
-    comboCorner.map(cc => {
-      var intersect = val.every(c => cc.indexOf(c) !== -1);
-      if (intersect) {
-        console.log('bingo');
-      }
+  checkCombo(val: number[][]) {
+    COMBOS.map(cc => {
+      val.map(v => {
+        var intersect = cc.every(c => v.indexOf(c) !== -1)
+        if(intersect){
+            alert('bingo');
+        }
+    });
     });
   }
 
@@ -99,8 +125,8 @@ export class AppComponent {
     this.createCard();
   }
 
-  deleteLast(){
-    if(this.numbersCalled.length != 1){
+  deleteLast() {
+    if (this.numbersCalled.length != 1) {
       this.numbersCalled.pop();
       this.createCard();
     }
