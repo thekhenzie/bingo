@@ -111,10 +111,12 @@ export class AppComponent {
 
   checkCombo(val: number[][]) {
     COMBOS.map(cc => {
-      val.map(v => {
+      val.map((v,ind) => {
         var intersect = cc.every(c => v.indexOf(c) !== -1)
         if(intersect){
-            alert('bingo');
+            alert(`Bingo card ${ind+1}`);
+            console.log(cc);
+            console.log(v);
         }
     });
     });
