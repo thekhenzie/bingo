@@ -8,11 +8,13 @@ Enter number called:
 <h5 style="display: inline">Numbers called: </h5>
 <div *ngFor="let number of numbersCalled" style="display: inline; margin-left: 10px;">{{number}}</div>
 <br>
+<button (click)="showCards()" style="margin-left: 20px;">Show/Hide all cards</button>
 <button (click)="deleteLast()" style="margin-left: 20px;">Delete last called</button>
 <button (click)="clear()" style="margin-left: 20px;">Clear</button>
 <br><br>
-<table *ngFor="let card of listOfCards">
-  <tr>
+<div *ngIf="isBingo">
+<table *ngFor="let card of listOfBingoCards">
+  <tr class="bingo-header">
     <th>B</th>
     <th>I</th>
     <th>N</th>
@@ -31,3 +33,25 @@ Enter number called:
   </tr>
 
 </table>
+</div>
+<div *ngIf="showAllCards">
+<table *ngFor="let card of listOfCards">
+  <tr>
+    <th>B</th>
+    <th>I</th>
+    <th>N</th>
+    <th>G</th>
+    <th>O</th>
+  </tr>
+  <tr *ngFor="let rowNumbers of card">
+    <td *ngFor="let number of rowNumbers" [ngClass]="{'picked' : number.isActive}">
+      <div *ngIf="number.value!=0; else isFree" (click)="clickNumber(number.value)">
+        {{number.value}}
+      </div>
+      <ng-template #isFree>
+        FREE
+      </ng-template>
+    </td>
+  </tr>
+</table>
+</div>

@@ -13,11 +13,13 @@ export class AppComponent {
   numbersCalled = [0];
 
   listOfCards = [];
+  listOfBingoCards = [];
   numberCalled: number;
   selectedPlayer = 'Khen';
   selectedCard = [];
   isBingo = false;
   bingoMessage= "";
+  showAllCards = false;
   constructor() {
     this.selectPlayerAndCard();
     this.createCard();
@@ -120,7 +122,8 @@ export class AppComponent {
           let card = {
             name: (ind + 1 <= 20) ? 'Khen' : 'Haart',
             cardNumber: (ind + 1 <= 20) ? (ind + 1) : (ind - 19),  
-            winningNum: v
+            winningNum: v,
+            trueCardNumber: ind
           };
           cardNumbers.push(card);
           this.isBingo = true;
@@ -131,7 +134,8 @@ export class AppComponent {
     if(this.isBingo){
       this.bingoMessage = "";
       cardNumbers.map(cn => {
-        this.bingoMessage += `${cn.name}: Card #${cn.cardNumber}\n`
+        this.bingoMessage += `${cn.name}: Card #${cn.cardNumber}\n`;
+        this.listOfBingoCards.push(this.listOfCards[cn.trueCardNumber]);
       });
       alert(this.bingoMessage)
     }
@@ -141,13 +145,21 @@ export class AppComponent {
     this.numbersCalled = [0];
     this.isBingo = false;
     this.bingoMessage = "";
+    this.listOfBingoCards = [];
     this.createCard();
   }
 
   deleteLast() {
     if (this.numbersCalled.length != 1) {
       this.numbersCalled.pop();
+      this.isBingo = false;
+      this.bingoMessage = "";
+      this.listOfBingoCards = [];
       this.createCard();
     }
+  }
+
+  showCards(){
+    this.showAllCards = !this.showAllCards;
   }
 }

@@ -14,3 +14,7 @@ th, td {
 .picked{
     background-color: #0facaa;
 }
+
+.bingo-header{
+    background-color: darkgoldenrod;
+}
