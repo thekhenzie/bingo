@@ -16,6 +16,8 @@ export class AppComponent {
   numberCalled: number;
   selectedPlayer = 'Khen';
   selectedCard = [];
+  isBingo = false;
+  bingoMessage= "";
   constructor() {
     this.selectPlayerAndCard();
     this.createCard();
@@ -95,35 +97,50 @@ export class AppComponent {
 
     var tantos = []; //index of the numbers called on your card
 
-    filtered.map((filter,ind) => {
-        var tan = [];
-        filter.map(f => {
-            var i = this.selectedCard[ind].findIndex(c => c == f); 
-            if(i != -1){
-                tan.push(i);
-            } 
-        });
-        tantos.push(tan);
+    filtered.map((filter, ind) => {
+      var tan = [];
+      filter.map(f => {
+        var i = this.selectedCard[ind].findIndex(c => c == f);
+        if (i != -1) {
+          tan.push(i);
+        }
+      });
+      tantos.push(tan);
     });
-    
+
     return tantos;
   };
 
   checkCombo(val: number[][]) {
+    let cardNumbers = [];
     COMBOS.map(cc => {
-      val.map((v,ind) => {
+      val.map((v, ind) => {
         var intersect = cc.every(c => v.indexOf(c) !== -1)
-        if(intersect){
-            alert(`Bingo card ${ind+1}`);
-            console.log(cc);
-            console.log(v);
+        if (intersect) {
+          let card = {
+            name: (ind + 1 <= 20) ? 'Khen' : 'Haart',
+            cardNumber: (ind + 1 <= 20) ? (ind + 1) : (ind - 19),  
+            winningNum: v
+          };
+          cardNumbers.push(card);
+          this.isBingo = true;
         }
+      });
     });
-    });
+
+    if(this.isBingo){
+      this.bingoMessage = "";
+      cardNumbers.map(cn => {
+        this.bingoMessage += `${cn.name}: Card #${cn.cardNumber}\n`
+      });
+      alert(this.bingoMessage)
+    }
   }
 
   clear() {
     this.numbersCalled = [0];
+    this.isBingo = false;
+    this.bingoMessage = "";
     this.createCard();
   }
 
