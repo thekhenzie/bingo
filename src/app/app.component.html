@@ -50,8 +50,8 @@ Enter number called:
       <th>O</th>
     </tr>
     <tr *ngFor="let rowNumbers of card">
-      <td *ngFor="let number of rowNumbers" [ngClass]="{'picked' : number.isActive, 'picked-haart' : number.isActive && i + 1 > 21, 
-          'picked-abu' : number.isActive && i + 1 > 36 }">
+      <td *ngFor="let number of rowNumbers" [ngClass]="{'picked' : number.isActive, 'picked-haart' : number.isActive && i + 1 > 25, 
+          'picked-abu' : number.isActive && i + 1 > 40 }">
         <div *ngIf="number.value!=0; else isFree" (click)="clickNumber(number.value)">
           {{number.value}}
         </div>

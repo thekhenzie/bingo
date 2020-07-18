@@ -3,7 +3,7 @@ import { KHENCARDS, HAARTCARDS } from '../data/cards';
 import { COMBOS } from '../data/combo';
 import { IPuro } from '../interface/interface';
 
-const KHN = 21;
+const KHN = 25;
 const KML = 15;
 const ABJ = 10;
 @Component({
@@ -94,14 +94,16 @@ export class AppComponent {
         this.numbersCalled.push(value);
       }
     }
-    this.isBingo = false;
-    this.bingoMessage = "";
-    this.listOfBingoCards = [];
     this.createCard();
   }
 
   checkBingo() {
     var tantos = this.checkTantos();
+
+    this.isBingo = false;
+    this.bingoMessage = "";
+    this.listOfBingoCards = [];
+
     this.checkCombo(tantos);
   }
 
