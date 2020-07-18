@@ -1,5 +1,11 @@
 <h1>Lets Play BINGO</h1>
-<h4> {{bingoMessage}}</h4>
+<h4> {{bingoMessage}} </h4>
+<div *ngFor="let puro of listOfPuros">
+  <div *ngIf="puro.puros.length != 0">
+    {{puro.name}} : {{ puro.puros | json}} - {{  puro.puros.length  / (75 - numbersCalled.length) * 100 | number : '1.2-2'}} %
+  </div>
+</div>
+
 <br>
 Enter number called:
 <input type="number" min="0" inputmode="numeric" pattern="[0-9]*" title="Number" [(ngModel)]="numberCalled">
@@ -7,51 +13,52 @@ Enter number called:
 <br><br>
 <h5 style="display: inline">Numbers called: </h5>
 <div *ngFor="let number of numbersCalled" style="display: inline; margin-left: 10px;">{{number}}</div>
-<br>
+<br><br>
+
 <button (click)="showCards()" style="margin-left: 20px;">Show/Hide all cards</button>
 <button (click)="deleteLast()" style="margin-left: 20px;">Delete last called</button>
 <button (click)="clear()" style="margin-left: 20px;">Clear</button>
 <br><br>
 <div *ngIf="isBingo">
-<table *ngFor="let card of listOfBingoCards">
-  <tr class="bingo-header">
-    <th>B</th>
-    <th>I</th>
-    <th>N</th>
-    <th>G</th>
-    <th>O</th>
-  </tr>
-  <tr *ngFor="let rowNumbers of card">
-    <td *ngFor="let number of rowNumbers" [ngClass]="{'picked' : number.isActive}">
-      <div *ngIf="number.value!=0; else isFree" (click)="clickNumber(number.value)">
-        {{number.value}}
-      </div>
-      <ng-template #isFree>
-        FREE
-      </ng-template>
-    </td>
-  </tr>
-
-</table>
+  <table *ngFor="let card of listOfBingoCards">
+    <tr class="bingo-header">
+      <th>B</th>
+      <th>I</th>
+      <th>N</th>
+      <th>G</th>
+      <th>O</th>
+    </tr>
+    <tr *ngFor="let rowNumbers of card;">
+      <td *ngFor="let number of rowNumbers" [ngClass]="{'picked' : number.isActive}">
+        <div *ngIf="number.value!=0; else isFree" (click)="clickNumber(number.value)">
+          {{number.value}}
+        </div>
+        <ng-template #isFree>
+          FREE
+        </ng-template>
+      </td>
+    </tr>
+  </table>
 </div>
 <div *ngIf="showAllCards">
-<table *ngFor="let card of listOfCards">
-  <tr>
-    <th>B</th>
-    <th>I</th>
-    <th>N</th>
-    <th>G</th>
-    <th>O</th>
-  </tr>
-  <tr *ngFor="let rowNumbers of card">
-    <td *ngFor="let number of rowNumbers" [ngClass]="{'picked' : number.isActive}">
-      <div *ngIf="number.value!=0; else isFree" (click)="clickNumber(number.value)">
-        {{number.value}}
-      </div>
-      <ng-template #isFree>
-        FREE
-      </ng-template>
-    </td>
-  </tr>
-</table>
+  <table *ngFor="let card of listOfCards; index as i">
+    <tr>
+      <th>B</th>
+      <th>I</th>
+      <th>N</th>
+      <th>G</th>
+      <th>O</th>
+    </tr>
+    <tr *ngFor="let rowNumbers of card">
+      <td *ngFor="let number of rowNumbers" [ngClass]="{'picked' : number.isActive, 'picked-haart' : number.isActive && i + 1 > 21, 
+          'picked-abu' : number.isActive && i + 1 > 36 }">
+        <div *ngIf="number.value!=0; else isFree" (click)="clickNumber(number.value)">
+          {{number.value}}
+        </div>
+        <ng-template #isFree>
+          FREE
+        </ng-template>
+      </td>
+    </tr>
+  </table>
 </div>

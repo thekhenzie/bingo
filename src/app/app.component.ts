@@ -1,13 +1,17 @@
 import { Component } from '@angular/core';
 import { KHENCARDS, HAARTCARDS } from '../data/cards';
 import { COMBOS } from '../data/combo';
+import { IPuro } from '../interface/interface';
 
-
+const KHN = 21;
+const KML = 15;
+const ABJ = 10;
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
+
 export class AppComponent {
   title = 'ng-fundamentals';
   numbersCalled = [0];
@@ -18,11 +22,19 @@ export class AppComponent {
   selectedPlayer = 'Khen';
   selectedCard = [];
   isBingo = false;
-  bingoMessage= "";
+  bingoMessage = "";
   showAllCards = false;
+  showStatistics = false;
+  listOfPuros: IPuro[] = [];
   constructor() {
     this.selectPlayerAndCard();
     this.createCard();
+
+    this.listOfPuros = [
+      { name: 'Khen', puros: [] },
+      { name: 'Haart', puros: [] },
+      { name: 'Abujeng', puros: [] }
+    ]
   }
 
   selectPlayerAndCard() {
@@ -82,6 +94,9 @@ export class AppComponent {
         this.numbersCalled.push(value);
       }
     }
+    this.isBingo = false;
+    this.bingoMessage = "";
+    this.listOfBingoCards = [];
     this.createCard();
   }
 
@@ -113,25 +128,66 @@ export class AppComponent {
     return tantos;
   };
 
+  checkPuro(combo: number[], value: number[], ind: number) {
+    var intersect = combo.filter(c => -1 !== value.indexOf(c));
+    if (combo.length - 1 == intersect.length) {
+      var puroNumber = combo.filter(c => -1 === value.indexOf(c))[0];
+      let owner = this.getBingoOwner(ind);
+
+      var puroIndex = this.listOfPuros.findIndex(lop => { return lop.name == owner.name });
+      if(puroIndex != -1){
+        this.listOfPuros[puroIndex].puros.push(this.selectedCard[ind][puroNumber]);
+        this.listOfPuros[puroIndex].puros = [...new Set(this.listOfPuros[puroIndex].puros)]
+          .sort(function (a, b) {
+            return a - b;
+          });
+      }
+    }
+  }
+
+  getBingoOwner(ind: number): { name: string, num: number } {
+    let winner = {
+      name: '',
+      num: 0
+    };
+    if (ind + 1 <= KHN) {
+      winner.name = 'Khen';
+      winner.num = ind + 1;
+    }
+    else if (ind + 1 - KHN <= KML) {
+      winner.name = 'Haart';
+      winner.num = ind + 1 - KHN;
+    }
+    else {
+      winner.name = 'Abujeng';
+      winner.num = ind + 1 - KHN - KML;
+    }
+    return winner;
+  }
+
   checkCombo(val: number[][]) {
     let cardNumbers = [];
     COMBOS.map(cc => {
       val.map((v, ind) => {
         var intersect = cc.every(c => v.indexOf(c) !== -1)
         if (intersect) {
+          let bingoWinner = this.getBingoOwner(ind);
           let card = {
-            name: (ind + 1 <= 20) ? 'Khen' : 'Haart',
-            cardNumber: (ind + 1 <= 20) ? (ind + 1) : (ind - 19),  
+            name: bingoWinner.name,
+            cardNumber: bingoWinner.num,
             winningNum: v,
             trueCardNumber: ind
           };
           cardNumbers.push(card);
           this.isBingo = true;
         }
+        else {
+          this.checkPuro(cc, v, ind);
+        }
       });
     });
 
-    if(this.isBingo){
+    if (this.isBingo) {
       this.bingoMessage = "";
       cardNumbers.map(cn => {
         this.bingoMessage += `${cn.name}: Card #${cn.cardNumber}\n`;
@@ -146,6 +202,11 @@ export class AppComponent {
     this.isBingo = false;
     this.bingoMessage = "";
     this.listOfBingoCards = [];
+    this.listOfPuros = [
+      { name: 'Khen', puros: [] },
+      { name: 'Haart', puros: [] },
+      { name: 'Abujeng', puros: [] }
+    ]
     this.createCard();
   }
 
@@ -159,7 +220,7 @@ export class AppComponent {
     }
   }
 
-  showCards(){
+  showCards() {
     this.showAllCards = !this.showAllCards;
   }
 }
