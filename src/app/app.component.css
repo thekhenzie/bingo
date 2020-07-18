@@ -15,6 +15,14 @@ th, td {
     background-color: #0facaa;
 }
 
+.picked-haart{
+    background-color: lightcoral!important;
+}
+
+.picked-abu {
+    background-color: limegreen!important;
+}
+
 .bingo-header{
     background-color: darkgoldenrod;
 }
